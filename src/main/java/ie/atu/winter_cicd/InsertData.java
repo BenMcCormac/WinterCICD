@@ -15,7 +15,7 @@ public class InsertData {
 
 
             // Insert a new record into the "Person" table
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO person (pCode, pName, time) VALUES (?, ?, ?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO person (pCode, pName, timeS) VALUES (?, ?, ?)");
             stmt.setInt(1, getLastInsertId(conn));
             stmt.setString(2, "Ben McCormack");
             stmt.setString(3, "11:59");
