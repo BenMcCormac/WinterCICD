@@ -1,44 +1,48 @@
 package ie.atu.winter_cicd;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Positive;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController
 {
-    public List<Person> product = new ArrayList<>();
+    public List<Person> person = new ArrayList<>();
+    public List<Person> sp = new ArrayList<>();
 
-    @GetMapping("/list")
-    public List<Person> getProduct()
+    @GetMapping("/list/{pCode}")
+    public List<Person> getPerson(@PathVariable String pCode)
     {
-        return product;
+
+        return sp;
     }
 
     @PostMapping( "/product")
     public List postProduct(@RequestBody @Valid Person newPerson)
     {
-        product.add(newPerson);
-        return product;
+        person.add(newPerson);
+        return person;
     }
 
     @PutMapping("/update/{pCode}")
     public List update(@PathVariable String pCode, @RequestBody @Valid Person newPerson)
     {
-        product.remove(pCode);
-        product.add(newPerson);
-        return product;
+
+
+        person.remove(pCode);
+        person.add(newPerson);
+        return person;
     }
 
     @DeleteMapping("/delete/{pCode}")
     public List delete(@PathVariable String pCode)
     {
-        product.remove(pCode);
-        return product;
+        person.remove(pCode);
+        return person;
     }
 }
