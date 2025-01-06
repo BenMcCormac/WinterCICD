@@ -4,26 +4,23 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.DefaultMessageCodesResolver;
-
-import java.text.Format;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Person
 {
-    @NotBlank(message ="Code can't be blank, Must be in format STU-XXXX")
-    @Min(value = 8, message = "Code must fit standard")
-    @Max(value = 8, message = "Code must fit standard")
-    private String pCode;
+    @NotBlank(message ="Code can't be blank, Must be in format XXXX")
+    @Min(value = 9999, message = "Code must fit standard")
+    @Max(value = 1000, message = "Code must fit standard")
+    private int pCode;
 
     @NotBlank(message ="Name can't be blank")
     @Max(value = 100, message = "Must have less than 100 characters")
     private String pName;
 
     //Year of birth
-    @NotBlank(message ="Year can't be blank, must be Electronics, Apparel or Furniture")
+    @NotBlank(message ="Year can't be blank")
     private int year;
 
     @NotBlank(message = "ClassNum/FormNum can't be blank")

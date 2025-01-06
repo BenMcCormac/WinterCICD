@@ -5,7 +5,7 @@ import java.sql.*;
 public class SelectData {
     public static void main(String[] args) {
         // MySQL database connection details
-        String url = "jdbc:mysql://localhost:3306/smartphones";
+        String url = "jdbc:mysql://localhost:3306";
         String username = "root";
         String password = "password";
 
