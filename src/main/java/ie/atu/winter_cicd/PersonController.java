@@ -18,10 +18,11 @@ public class PersonController
         return person;
     }
 
-    @PostMapping( "/product")
+    @PostMapping( "/new")
     public List postPerson(@RequestBody @Valid Person newPerson)
     {
         person.add(newPerson);
+
         return person;
     }
 

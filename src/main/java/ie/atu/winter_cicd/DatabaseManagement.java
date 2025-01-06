@@ -1,7 +1,7 @@
 package ie.atu.winter_cicd;
 
 import java.sql.*;
-public class DatabaseManagement implements DatabaseInterface{
+public abstract class DatabaseManagement implements DatabaseInterface{
     private Connection connection;
     private PreparedStatement stmt;
 
@@ -13,7 +13,7 @@ public class DatabaseManagement implements DatabaseInterface{
     }
 
     @Override
-    public void addStudent(String pName, String pCode, String timeS) throws SQLException {
+    public void addStudent(String pName, int pCode, String timeS) throws SQLException {
         try {
 
             // Insert a new record into the "device" table
@@ -32,7 +32,7 @@ public class DatabaseManagement implements DatabaseInterface{
     }
 
     @Override
-    public void addStudentInfo(String classNum, String gender, int year) throws SQLException {
+    public void addStudentInfo(int pCode, String classNum, String gender, int year) throws SQLException {
         try {
 
             stmt = connection.prepareStatement("INSERT INTO studet_info (pCode, gender, classNum, year) VALUES (?, ?, ?, ?)");
@@ -62,7 +62,7 @@ public class DatabaseManagement implements DatabaseInterface{
              ResultSet resultSet = statement.executeQuery(selectSQL)) {
 
             while (resultSet.next()) {
-                String pCode = resultSet.getString("pCode");
+                int pCode = resultSet.getInt("pCode");
                 String pName = resultSet.getString("pName");
                 String gender = resultSet.getString("gender");
                 String classNum = resultSet.getString("classNum");
@@ -84,7 +84,7 @@ public class DatabaseManagement implements DatabaseInterface{
             // Load the driver class ---------------- update for new database
             Class.forName("com.mysql.cj.jdbc.Driver");
             // Create a connection to the database, hardcoding values for now.
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/smartphones", "root", "password");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "password");
             System.out.println("Connection made to connection pool");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -143,22 +143,16 @@ public class DatabaseManagement implements DatabaseInterface{
     }
 
     @Override
-    public void updateStudentForm(int pCode, String newForm) throws SQLException {
+    public void updateStudent(int pCode, String newForm, String newGender, String newName, String newYear, String newTimeS) throws SQLException {
+        String updateForm = "UPDATE student_info SET classNum = ? WHERE pCode = ?";
+        String updateGender = "UPDATE student_info SET classNum = ? WHERE pCode = ?";
+        String updateName = "UPDATE student_info SET classNum = ? WHERE pCode = ?";
+        String updateYear = "UPDATE student_info SET classNum = ? WHERE pCode = ?";
+        String updateTimeS = "UPDATE student_info SET classNum = ? WHERE pCode = ?";
 
-    }
-
-    @Override
-    public void updateStudentGender(int pCode, String newGender) throws SQLException {
-
-    }
-
-    @Override
-    public void updateStudentForm(String pCode, String newForm) throws SQLException {
-        String updateSQL = "UPDATE student_info SET classNum = ? WHERE pCode = ?";
-
-        try(PreparedStatement statement = connection.prepareStatement(updateSQL)) {
+        try(PreparedStatement statement = connection.prepareStatement(updateForm)) {
             statement.setString(1, newForm);
-            statement.setString(2, pCode);
+            statement.setInt(2, pCode);
 
             int affectedInfo = statement.executeUpdate();
             if(affectedInfo > 0)
@@ -171,20 +165,63 @@ public class DatabaseManagement implements DatabaseInterface{
         }catch (SQLException e){
             e.printStackTrace();
         }
-    }
 
-    @Override
-    public void updateStudentGender(String pCode, String gender) throws SQLException {
-        String updateSQL = "UPDATE student_info SET gender = ? WHERE pCode = ?";
-
-        try(PreparedStatement statement = connection.prepareStatement(updateSQL)) {
-            statement.setString(1, gender);
-            statement.setString(2, pCode);
+        try(PreparedStatement statement = connection.prepareStatement(updateGender)) {
+            statement.setString(1, newGender);
+            statement.setInt(2, pCode);
 
             int affectedInfo = statement.executeUpdate();
             if(affectedInfo > 0)
             {
-                System.out.println("Student gender updated successfully.");
+                System.out.println("Customer gender updated successfully.");
+            }else{
+                System.out.println("No customer found with ID: " + pCode);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        try(PreparedStatement statement = connection.prepareStatement(updateName)) {
+            statement.setString(1, newName);
+            statement.setInt(2, pCode);
+
+            int affectedInfo = statement.executeUpdate();
+            if(affectedInfo > 0)
+            {
+                System.out.println("Customer Name updated successfully.");
+            }else{
+                System.out.println("No customer found with ID: " + pCode);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        try(PreparedStatement statement = connection.prepareStatement(updateYear)) {
+            statement.setString(1, newYear);
+            statement.setInt(2, pCode);
+
+            int affectedInfo = statement.executeUpdate();
+            if(affectedInfo > 0)
+            {
+                System.out.println("Customer BirthYear updated successfully.");
+            }else{
+                System.out.println("No customer found with ID: " + pCode);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        try(PreparedStatement statement = connection.prepareStatement(updateTimeS)) {
+            statement.setString(1, newTimeS);
+            statement.setInt(2, pCode);
+
+            int affectedInfo = statement.executeUpdate();
+            if(affectedInfo > 0)
+            {
+                System.out.println("Customer TimeStamp updated successfully.");
             }else{
                 System.out.println("No customer found with ID: " + pCode);
             }
