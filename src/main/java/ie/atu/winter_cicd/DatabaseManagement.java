@@ -62,92 +62,14 @@ public class DatabaseManagement implements DatabaseInterface{
              ResultSet resultSet = statement.executeQuery(selectSQL)) {
 
             while (resultSet.next()) {
-                String deviceID = resultSet.getString("device_id");
-                String brandName = resultSet.getString("brand_name");
-                String model = resultSet.getString("model");
-                String storage = resultSet.getString("storage");
-                String osName = resultSet.getString("os_name");
+                String pCode = resultSet.getString("pCode");
+                String pName = resultSet.getString("pName");
+                String gender = resultSet.getString("gender");
+                String classNum = resultSet.getString("classNum");
+                int year = resultSet.getInt("year");
 
                 //resultBuilder ensures all data from the SQL statement is displayed and not just the most recent
-                resultBuilder.append(deviceID).append(" ").append(brandName).append(" ").append(model).append(" ").append(storage).append(" ").append(osName).append("\n");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultBuilder.toString();
-    }
-
-    @Override
-    public String getAppleData() throws SQLException {
-        StringBuilder resultBuilder = new StringBuilder();
-
-        String selectSQL = "SELECT * FROM device d " +
-                "JOIN phone_info p ON d.device_id = p.device_id " +
-                "WHERE d.brand_name = 'Apple'";
-
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(selectSQL)) {
-
-            while (resultSet.next()) {
-                String deviceID = resultSet.getString("device_id");
-                String brandName = resultSet.getString("brand_name");
-                String model = resultSet.getString("model");
-                String storage = resultSet.getString("storage");
-                String osName = resultSet.getString("os_name");
-
-
-                //resultBuilder ensures all data from the SQL statement is displayed and not just the most recent
-                resultBuilder.append(deviceID).append(" ").append(brandName).append(" ").append(model).append(" ").append(storage).append(" ").append(osName).append("\n");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultBuilder.toString();
-    }
-
-    @Override
-    public String getSamsungData() throws SQLException {
-        StringBuilder resultBuilder = new StringBuilder();
-
-        String selectSQL = "SELECT * FROM device d " +
-                "JOIN phone_info p ON d.device_id = p.device_id " +
-                "WHERE d.brand_name = 'Samsung'";
-
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(selectSQL)) {
-
-            while (resultSet.next()) {
-                String deviceID = resultSet.getString("device_id");
-                String brandName = resultSet.getString("brand_name");
-                String model = resultSet.getString("model");
-                String storage = resultSet.getString("storage");
-                String osName = resultSet.getString("os_name");
-
-                //resultBuilder ensures all data from the SQL statement is displayed and not just the most recent
-                resultBuilder.append(deviceID).append(" ").append(brandName).append(" ").append(model).append(" ").append(storage).append(" ").append(osName).append("\n");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultBuilder.toString();
-    }
-    @Override
-    public String getCustomerData() throws SQLException{
-        StringBuilder resultBuilder = new StringBuilder();
-
-        String selectSQL = "SELECT * FROM customer d";
-
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(selectSQL)) {
-
-            while (resultSet.next()) {
-                String customer_id = resultSet.getString("customer_id");
-                String name = resultSet.getString("name");
-                String email = resultSet.getString("email");
-                String phone_no = resultSet.getString("phone_no");
-
-                //resultBuilder ensures all data from the SQL statement is displayed and not just the most recent
-                resultBuilder.append(customer_id).append(" ").append(name).append(" ").append(email).append(" ").append(phone_no).append("\n");
+                resultBuilder.append(pCode).append(" ").append(pName).append(" ").append(gender).append(" ").append(classNum).append(" ").append(year).append("\n");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -270,36 +192,6 @@ public class DatabaseManagement implements DatabaseInterface{
         }catch (SQLException e){
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public String getCustomerSelection(String selection) throws SQLException {
-        StringBuilder resultBuilder = new StringBuilder();
-
-        // SQL query with a placeholder (?)
-        String selectSQL = "SELECT * FROM device d " +
-                "JOIN phone_info p ON d.device_id = p.device_id " +
-                "WHERE p.device_id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(selectSQL)) {
-            // Set the value of the placeholder (?)
-            statement.setString(1, selection);
-
-            // Execute the query
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    String deviceID = resultSet.getString("device_id");
-                    String brandName = resultSet.getString("brand_name");
-                    String model = resultSet.getString("model");
-                    String storage = resultSet.getString("storage");
-                    String osName = resultSet.getString("os_name");
-
-                    //resultBuilder ensures all data from the SQL statement is displayed and not just the most recent
-                    resultBuilder.append(deviceID).append(" ").append(brandName).append(" ").append(model).append(" ").append(storage).append(" ").append(osName).append("\n");                }
-            }
-        }
-
-        return resultBuilder.toString(); //returns all database data and not just most recent
     }
 }
 
