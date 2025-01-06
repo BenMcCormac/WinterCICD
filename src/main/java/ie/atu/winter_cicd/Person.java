@@ -34,5 +34,5 @@ public class Person
 
     //A timestamp for time of info update
     @NotBlank(message ="Timestamp can't be blank")
-    private String time;
+    private String timeS;
 }
