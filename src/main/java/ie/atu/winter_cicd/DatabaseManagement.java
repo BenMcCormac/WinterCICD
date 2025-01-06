@@ -15,14 +15,14 @@ public class DatabaseManagement implements DatabaseInterface{
     }
 
     @Override
-    public void addDeviceData(String pName, String model, String cost) throws SQLException {
+    public void addStudent(String pName, String pCode, String timeS) throws SQLException {
         try {
 
             // Insert a new record into the "device" table
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO person (pCode, pName, timeS) VALUES (?, ?, ?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO person (pCode, timeS, pName) VALUES (?, ?, ?)");
             stmt.setInt(1, getLastInsertId(conn));
-            stmt.setString(2, pName);
-            stmt.setString(3, timeS);
+            stmt.setString(3, pName);
+            stmt.setString(2, timeS);
             stmt.executeUpdate();
 
             System.out.println("Insert completed successfully.");
@@ -34,54 +34,15 @@ public class DatabaseManagement implements DatabaseInterface{
     }
 
     @Override
-    public void addPhoneInfoData(String storage, String os) throws SQLException {
+    public void addStudentInfo(String classNum, String gender, int year) throws SQLException {
         try {
 
-            stmt = connection.prepareStatement("INSERT INTO phone_info (device_id, info_id, storage, os_name) VALUES (?, ?, ?, ?)");
+            stmt = connection.prepareStatement("INSERT INTO studet_info (pCode, gender, classNum, year) VALUES (?, ?, ?, ?)");
             stmt.setInt(1, getLastInsertId(connection));
-            stmt.setInt(2, getLastInsertId(connection));
-            stmt.setString(3, storage);
-            stmt.setString(4, os);
+            stmt.setString(3, classNum);
+            stmt.setString(2, gender);
+            stmt.setInt(4, year);
 
-            stmt.executeUpdate();
-
-            System.out.println("Insert completed successfully.");
-        } catch (SQLException ex) {
-
-            System.out.println("Record insert failed.");
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void addCustomerData(String custName, String email, String phoneNo) throws SQLException {
-        try {
-
-            stmt = connection.prepareStatement("INSERT INTO customer (customer_id, name, email, phone_no) VALUES (?, ?, ?, ?)");
-            stmt.setInt(1, getLastInsertId(connection));
-            stmt.setString(2, custName);
-            stmt.setString(3, email);
-            stmt.setString(4, phoneNo);
-            stmt.executeUpdate();
-
-            System.out.println("Insert completed successfully.");
-        } catch (SQLException ex) {
-
-            System.out.println("Record insert failed.");
-            ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void addStoreData(String storeName, String address) throws SQLException {
-        try {
-
-            stmt = connection.prepareStatement("INSERT INTO store (store_id, device_id, customer_id, store_name, address) VALUES (?, ?, ?, ?, ?)");
-            stmt.setInt(1, getLastInsertId(connection));
-            stmt.setInt(2, getLastInsertId(connection));
-            stmt.setInt(3, getLastInsertId(connection));
-            stmt.setString(4, storeName);
-            stmt.setString(5, address);
             stmt.executeUpdate();
 
             System.out.println("Insert completed successfully.");
@@ -96,8 +57,8 @@ public class DatabaseManagement implements DatabaseInterface{
     public String getData() throws SQLException {
         StringBuilder resultBuilder = new StringBuilder();
 
-        String selectSQL = "SELECT * FROM device d " +
-                "JOIN phone_info p ON d.device_id = p.device_id";
+        String selectSQL = "SELECT * FROM person p " +
+                "JOIN student_info s ON p.pCode = s.pCode";
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(selectSQL)) {
@@ -200,7 +161,7 @@ public class DatabaseManagement implements DatabaseInterface{
     public void connectionTest() throws SQLException {
         try
         {
-            // Load the driver class
+            // Load the driver class ---------------- update for new database
             Class.forName("com.mysql.cj.jdbc.Driver");
             // Create a connection to the database, hardcoding values for now.
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/smartphones", "root", "password");
@@ -210,6 +171,7 @@ public class DatabaseManagement implements DatabaseInterface{
         }
     }
 
+    //finds last modified info
     private static int getLastInsertId(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
@@ -221,26 +183,26 @@ public class DatabaseManagement implements DatabaseInterface{
     }
 
     @Override
-    public void deleteCustomerData(int delete) throws SQLException {  //using transactions to wrap DELETE statement to ensure all or nothing
-        String deleteStoreSQL = "DELETE FROM store WHERE customer_id = ?" ;
-        String deleteCustomerSQL = "DELETE FROM customer WHERE customer_id = ?";
+    public void deleteStudentData(int pCode) throws SQLException {  //using transactions to wrap DELETE statement to ensure all or nothing
+        String deletePersonSQL = "DELETE FROM person WHERE pCode = ?" ;
+        String deleteStudentSQL = "DELETE FROM student_info WHERE pCode = ?";
 
         try {
             connection.setAutoCommit(false); // Start transaction
-            try (PreparedStatement statement1 = connection.prepareStatement(deleteStoreSQL);
-                 PreparedStatement statement2 = connection.prepareStatement(deleteCustomerSQL)) {
-                statement1.setInt(1, delete);
-                statement2.setInt(1, delete);
+            try (PreparedStatement statement1 = connection.prepareStatement(deletePersonSQL);
+                 PreparedStatement statement2 = connection.prepareStatement(deleteStudentSQL)) {
+                statement1.setInt(1, pCode);
+                statement2.setInt(1, pCode);
 
                 int affectedData1 = statement1.executeUpdate();
                 int affectedData2 = statement2.executeUpdate();
 
                 if (affectedData1 > 0 && affectedData2 > 0)
                 {
-                    System.out.println("Customer with ID " + delete + " deleted");
+                    System.out.println("Customer with ID " + pCode + " deleted");
                 }else
                 {
-                    System.out.println("No customer found with ID: " + delete);
+                    System.out.println("No customer found with ID: " + pCode);
                 }
 
                 connection.commit(); // Commit transaction
@@ -261,19 +223,40 @@ public class DatabaseManagement implements DatabaseInterface{
     }
 
     @Override
-    public void updateCustomerData(int custId, String newEmail) throws SQLException {
-        String updateSQL = "UPDATE customer SET email = ? WHERE customer_id = ?";
+    public void updateStudentForm(String pCode, String newForm) throws SQLException {
+        String updateSQL = "UPDATE student_info SET classNum = ? WHERE pCode = ?";
 
         try(PreparedStatement statement = connection.prepareStatement(updateSQL)) {
-            statement.setString(1, newEmail);
-            statement.setInt(2, custId);
+            statement.setString(1, newForm);
+            statement.setString(2, pCode);
 
             int affectedInfo = statement.executeUpdate();
             if(affectedInfo > 0)
             {
-                System.out.println("Customer email updated successfully.");
+                System.out.println("Customer form updated successfully.");
             }else{
-                System.out.println("No customer found with ID: " + custId);
+                System.out.println("No customer found with ID: " + pCode);
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateStudentGender(String pCode, String gender) throws SQLException {
+        String updateSQL = "UPDATE student_info SET gender = ? WHERE pCode = ?";
+
+        try(PreparedStatement statement = connection.prepareStatement(updateSQL)) {
+            statement.setString(1, gender);
+            statement.setString(2, pCode);
+
+            int affectedInfo = statement.executeUpdate();
+            if(affectedInfo > 0)
+            {
+                System.out.println("Student gender updated successfully.");
+            }else{
+                System.out.println("No customer found with ID: " + pCode);
             }
 
         }catch (SQLException e){

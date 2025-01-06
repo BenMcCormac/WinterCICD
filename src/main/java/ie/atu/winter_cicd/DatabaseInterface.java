@@ -4,13 +4,12 @@ import java.sql.SQLException;
 
 public interface DatabaseInterface
 {
-    void addDeviceData(String pCode, String pName, String timeS) throws SQLException;
-    void addPhoneInfoData(String storage, String os) throws SQLException;
-    void addCustomerData(String custName, String email, String phoneNo) throws SQLException;
-    void addStoreData(String storeName, String address) throws SQLException;
+    void addStudent(String pCode, String pName, String timeS) throws SQLException;
+    void addStudentInfo(String classNum, String gender, int year) throws SQLException;
     void connectionTest() throws SQLException;
-    void deleteCustomerData(int delete) throws SQLException;
-    void updateCustomerData(int custId, String email) throws SQLException;
+    void deleteStudentData(int pCode) throws SQLException;
+    void updateStudentForm(int pCode, String newForm) throws SQLException;
+    void updateStudentGender(int pCode, String newGender) throws SQLException;
     String getData() throws SQLException;
     String getAppleData() throws SQLException;
     String getSamsungData() throws SQLException;
