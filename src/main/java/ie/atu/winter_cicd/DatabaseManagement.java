@@ -1,13 +1,11 @@
 package ie.atu.winter_cicd;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-
 import java.sql.*;
 public class DatabaseManagement implements DatabaseInterface{
     private Connection connection;
     private PreparedStatement stmt;
 
-    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/smartphones", "root", "password");
+    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "password");
 
     public DatabaseManagement(String url, String username, String pass) throws SQLException
     {
@@ -219,6 +217,16 @@ public class DatabaseManagement implements DatabaseInterface{
                 e.printStackTrace();
             }
         }
+
+    }
+
+    @Override
+    public void updateStudentForm(int pCode, String newForm) throws SQLException {
+
+    }
+
+    @Override
+    public void updateStudentGender(int pCode, String newGender) throws SQLException {
 
     }
 

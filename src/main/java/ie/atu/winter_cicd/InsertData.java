@@ -22,7 +22,7 @@ public class InsertData {
             stmt.executeUpdate();
 
             // Insert a new record into the "emails" table, referencing the new user
-            stmt = conn.prepareStatement("INSERT INTO phone_info (pCode, gender, year, classNum) VALUES (?, ?, ?, ?)");
+            stmt = conn.prepareStatement("INSERT INTO student_info (pCode, gender, year, classNum) VALUES (?, ?, ?, ?)");
             stmt.setInt(1, getLastInsertId(conn));
             stmt.setString(3, "2003");
             stmt.setString(4, "3B");

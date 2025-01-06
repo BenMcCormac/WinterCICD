@@ -14,5 +14,10 @@ public interface DatabaseInterface
     String getAppleData() throws SQLException;
     String getSamsungData() throws SQLException;
     String getCustomerData() throws SQLException;
+
+    void updateStudentForm(String pCode, String newForm) throws SQLException;
+
+    void updateStudentGender(String pCode, String gender) throws SQLException;
+
     String getCustomerSelection(String selection) throws SQLException;
 }
