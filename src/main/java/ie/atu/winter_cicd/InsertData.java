@@ -9,7 +9,7 @@ public class InsertData {
     public static void main(String[] args) throws SQLException {
 
         // Connect to the database
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/smartphones", "root", "password");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "password");
 
         try {
 
